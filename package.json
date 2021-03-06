@@ -1,5 +1,5 @@
 {
-  "name": "Employee-Management-System",
+  "name": "employee-management-system",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,10 @@
     "url": "git+https://github.com/smcmillan28/Employee-Management-System.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "", 
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/smcmillan28/Employee-Management-System/issues"
   },
-  "homepage": "https://github.com/smcmillan28/Employee-Management-System#readme",
-  "dependencies": {
-    "inquirer": "^8.0.0",
-    "mysql": "^2.18.1"
-  }
-}
+  "homepage": "https://github.com/smcmillan28/Employee-Management-System#readme"
+} 
