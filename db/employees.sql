@@ -18,15 +18,15 @@ CREATE TABLE employees(
 );
 
 CREATE TABLE departments(
-    id INT AUTO_INCREMENT NOT NULL,
+    id INT UNSIGNED AUTO_INCREMENT NOT NULL,
     name VARCHAR(30) NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE roles(
-    id INT AUTO_INCREMENT NOT NULL,
-    title VARCHAR(30),
-    salary DECIMAL(9,2),
-    department_id INT,
+    id INT UNSIGNED AUTO_INCREMENT NOT NULL,
+    title VARCHAR(30) UNIQUE NOT NULL,
+    salary DECIMAL(9,2) UNSIGNED NOT NULL,
+    department_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (id)
 );
