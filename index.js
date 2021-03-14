@@ -84,8 +84,37 @@ const queryAddEmp = () => {
             }
         ])
         .then((res) => {
-            console.log(res);
-            initialPrompt();
+            if (res.role <= 3) {
+                const query = connection.query(
+                    `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUE ("${res.first}", "${res.last}", ${res.role}, 1)`,
+                    (err, res) => {
+                        if (err) throw err;
+                        initialPrompt();
+                    }
+                );
+                // Adding some context to the query
+                console.log("Employee added!");
+            } else if (res.role >= 7) {
+                const query = connection.query(
+                    `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUE ("${res.first}", "${res.last}", ${res.role}, 7)`,
+                    (err, res) => {
+                        if (err) throw err;
+                        initialPrompt();
+                    }
+                );
+                // Adding some context to the query
+                console.log("Employee added!");
+            } else {
+                const query = connection.query(
+                    `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUE ("${res.first}", "${res.last}", ${res.role}, 4)`,
+                    (err, res) => {
+                        if (err) throw err;
+                        initialPrompt();
+                    }
+                );
+                // Adding some context to the query
+                console.log("Employee added!");
+            }
         });
 }
 
