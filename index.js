@@ -1,6 +1,12 @@
+// Importing dependencies
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
+
+// Importing classes for future use
+const Employee = require("./classes/Employee");
+const Role = require("./classes/Role");
+const Department = require("./classes/Department");
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -13,17 +19,75 @@ const connection = mysql.createConnection({
 // Write query functions to handle all possible requests from user
 const queryAll = () => {
     const query = connection.query(
-        'SELECT * FROM employees',
+        'SELECT first_name, last_name, title, salary, name FROM employees INNER JOIN roles ON employees.role_id = roles.id INNER JOIN departments ON roles.department_id = departments.id',
         (err, res) => {
             if (err) throw err;
             console.table(res);
             initialPrompt();
         }
     );
-
     // Adding some context to the search
     console.log("See below for a full list of your employees!");
 };
+
+const queryRole = () => {
+    const query = connection.query(
+        'SELECT title, salary, name FROM roles INNER JOIN departments ON roles.department_id = departments.id',
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            initialPrompt();
+        }
+    );
+    // Adding some context to the search
+    console.log("See below for a full list of company roles.");
+};
+
+const queryDept = () => {
+    const query = connection.query(
+        'SELECT * FROM departments',
+        (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            initialPrompt();
+        }
+    );
+    // Adding some context to the search
+    console.log("See below for a full list of company departments.");
+};
+
+const queryAddEmp = () => {
+    const roleChoices = [];
+    connection.query("SELECT * FROM roles", function (err, res) {
+        if (err) throw err;
+        for (i = 0; i < res.length; i++) {
+            roleChoices.push(res[i].id);
+        }
+    });
+    inquirer
+        .prompt([
+            {
+                type: "input", 
+                message: "Please enter the employee's first name: ", 
+                name: "first"
+            },
+            {
+                type: "input", 
+                message: "Please enter the employee's last name: ", 
+                name: "last"
+            },
+            {
+                type: "list", 
+                message: "Please select the new employee's role ID.", 
+                name: "role", 
+                choices: roleChoices
+            }
+        ])
+        .then((res) => {
+            console.log(res);
+            initialPrompt();
+        });
+}
 
 // Write initial prompt function to run when program is initiated
 const initialPrompt = () => {
@@ -33,24 +97,24 @@ const initialPrompt = () => {
                 type: "list", 
                 message: "What would you like to do?",
                 name: "initial", 
-                choices: ["View All Employees", "View All Employees By Department", "View All Employees By Role", "Add Employee", "Add Department", "Add Role", "Update Employee Role", "Exit"],
+                choices: ["View All Employee Information", "View All Departments", "View All Roles", "Add Employee", "Add Department", "Add Role", "Update Employee Role", "Exit"],
             }
         ])
         .then((res) => {
-            if (res.initial === "View All Employees") {
+            if (res.initial === "View All Employee Information") {
                 queryAll();
-            } else if (res.initial === "View All Employees By Department") {
-                // querySongs();
-            } else if (res.initial === "View All Employees By Role") {
-                // queryRange();
+            } else if (res.initial === "View All Departments") {
+                queryDept();
+            } else if (res.initial === "View All Roles") {
+                queryRole();
             } else if (res.initial === "Add Employee") {
-                // queryMultArtist();
+                queryAddEmp();
             } else if (res.initial === "Add Role") {
-                // queryAlbum();
+                // queryAddRole();
             } else if (res.initial === "Add Department") {
-                // queryAlbum();
+                // queryAddDept();
             } else if (res.initial === "Update Employee Role") {
-                // queryAlbum();
+                // queryUpdateRole();
             } else {
                 connection.end();
             }
