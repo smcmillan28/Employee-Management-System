@@ -118,6 +118,68 @@ const queryAddEmp = () => {
         });
 }
 
+const queryAddRole = () => {
+    const deptChoices = [];
+    connection.query("SELECT * FROM departments", function (err, res) {
+        if (err) throw err;
+        for (i = 0; i < res.length; i++) {
+            deptChoices.push(res[i].id);
+        }
+    });
+    inquirer
+        .prompt([
+            {
+                type: "input", 
+                message: "Please give the new role a name: ",
+                name: "title"
+            },
+            {
+                type: "input", 
+                message: "Please enter the starting annual salary in the form of a number: ",
+                name: "salary"
+            },
+            {
+                type: "list",
+                message: "Please select a department ID for this new role: ",
+                name: "dept",
+                choices: deptChoices
+            }
+        ])
+        .then((res) => {
+            const query = connection.query(
+                `INSERT INTO roles (title, salary, department_id) VALUE ("${res.title}", ${res.salary}, ${res.dept})`,
+                (err, res) => {
+                    if (err) throw err;
+                    initialPrompt();
+                }
+            );
+            // Adding some context to the query
+            console.log("Role added!");
+        });
+}
+
+const queryAddDept = () => {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What is the name of the department you would like to add?",
+                name: "title"
+            }
+        ])
+        .then((res) => {
+            const query = connection.query(
+                `INSERT INTO departments (name) VALUE ("${res.title}")`,
+                (err, res) => {
+                    if (err) throw err;
+                    initialPrompt();
+                }
+            );
+            // Adding some context to the query
+            console.log("Department added!");
+        })
+}
+
 // Write initial prompt function to run when program is initiated
 const initialPrompt = () => {
     inquirer
@@ -139,9 +201,9 @@ const initialPrompt = () => {
             } else if (res.initial === "Add Employee") {
                 queryAddEmp();
             } else if (res.initial === "Add Role") {
-                // queryAddRole();
+                queryAddRole();
             } else if (res.initial === "Add Department") {
-                // queryAddDept();
+                queryAddDept();
             } else if (res.initial === "Update Employee Role") {
                 // queryUpdateRole();
             } else {
