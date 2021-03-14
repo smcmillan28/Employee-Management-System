@@ -26,7 +26,7 @@ const queryAll = () => {
             initialPrompt();
         }
     );
-    // Adding some context to the search
+    // Adding some context to the query
     console.log("See below for a full list of your employees!");
 };
 
@@ -39,7 +39,7 @@ const queryRole = () => {
             initialPrompt();
         }
     );
-    // Adding some context to the search
+    // Adding some context to the query
     console.log("See below for a full list of company roles.");
 };
 
@@ -52,7 +52,7 @@ const queryDept = () => {
             initialPrompt();
         }
     );
-    // Adding some context to the search
+    // Adding some context to the query
     console.log("See below for a full list of company departments.");
 };
 
@@ -180,6 +180,41 @@ const queryAddDept = () => {
         })
 }
 
+// const queryUpdateRole = () => {
+//     const roleUpdates = [];
+//     connection.query("SELECT * FROM roles", function (err, res) {
+//         if (err) throw err;
+//         for (i = 0; i < res.length; i++) {
+//             roleUpdates.push(res[i].title);
+//         }
+//     });
+//     inquirer
+//         .prompt([
+//             {
+//                 type: "list",
+//                 message: "Which role would you like to update?",
+//                 name: "selection",
+//                 choices: roleUpdates
+//             },
+//             {
+//                 type: "input",
+//                 message: "Please enter the role's new salary in the form of a number: ",
+//                 name: "newsal"
+//             }
+//         ])
+//         .then((res) => {
+//             const query = connection.query(
+//                 `UPDATE roles SET salary = ${res.newsal} WHERE title = "${res.selection}"`,
+//                 (err, res) => {
+//                     if (err) throw err;
+//                     initialPrompt();
+//                 }
+//             );
+//             // Adding some context to the query
+//             console.log("Role updated!");
+//         })
+// }
+
 // Write initial prompt function to run when program is initiated
 const initialPrompt = () => {
     inquirer
@@ -188,7 +223,7 @@ const initialPrompt = () => {
                 type: "list", 
                 message: "What would you like to do?",
                 name: "initial", 
-                choices: ["View All Employee Information", "View All Departments", "View All Roles", "Add Employee", "Add Department", "Add Role", "Update Employee Role", "Exit"],
+                choices: ["View All Employee Information", "View All Departments", "View All Roles", "Add Employee", "Add Department", "Add Role", "Exit"],
             }
         ])
         .then((res) => {
@@ -204,8 +239,8 @@ const initialPrompt = () => {
                 queryAddRole();
             } else if (res.initial === "Add Department") {
                 queryAddDept();
-            } else if (res.initial === "Update Employee Role") {
-                // queryUpdateRole();
+            // } else if (res.initial === "Update Role Information") {
+            //     queryUpdateRole();
             } else {
                 connection.end();
             }
